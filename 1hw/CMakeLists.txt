@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
-project(steve_compilers)
+project(ast)
 
 set(CMAKE_CXX_STANDARD 11)
 
@@ -11,4 +11,5 @@ set(SOURCE_FILES
         type.hpp
         value.hpp)
 
-add_executable(steve_compilers ${SOURCE_FILES})
+add_executable(ast ${SOURCE_FILES})
+
