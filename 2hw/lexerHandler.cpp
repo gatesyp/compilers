@@ -4,41 +4,44 @@
 #include "lex.hpp"
 #include <vector>
 
-using namespace std;
-
-// helper function to remove all whitespace
-std::string stripWhiteSpace(std::string& str)
-{
+// Remove all whitespace from input
+std::string stripWhiteSpace(std::string& str){
 	str.erase(std::remove(str.begin(), str.end(), ' '), str.end());
 	return str;
 }
 
+void prettyPrintTokens(std::vector<Token*> tokenList){
+        for(int i = 0; i < tokenList.size(); i++) {
+            std::cout << "<kind: " << tokenList[i]->kind << ", attr: " << tokenList[i]->attribute <<">\n";
+        }
+}
+
 int main() {
-	std::vector<Token*> toks; 
-	Token* tok = new Token();
+    // vector to hold our tokens
+	std::vector<Token*> tokenList; 
+	Token* token = new Token();
 
 	while (true) {
         //string input;
-        string input;
-        getline(cin, input);    
+        std::string input;
+        getline(std::cin, input);    
 
         // handle case where nothing was inputted
         if (input == "")
             break;
+
         input = stripWhiteSpace(input);
         Lexer lex = Lexer(input);
+
         while(lex.first != lex.last){
-            tok = lex.next();
-            toks.push_back(tok);
+            token = lex.next();
+            tokenList.push_back(token);
         }
 
-        tok = lex.next();
-        toks.push_back(tok);
+        // push the last item
+        token = lex.next();
+        tokenList.push_back(token);
 
-
-        for(int i = 0; i < toks.size(); i++) {
-            cout << "<kind: " << toks[i]->kind << ", attr: " << toks[i]->attribute <<">";
-            cout << "\n";
-        }
+        prettyPrintTokens(tokenList);
     }
 }

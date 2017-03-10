@@ -5,7 +5,8 @@
 #include <cassert>
 #include <string>
 #include <iostream>
-// We define each type of token our lexer supports. 
+// We define each type of token our lexer supports
+// Code from class
 enum Token_kind {
     EOF_tok, Plus_tok, 
     Minus_tok, Mul_tok,
@@ -23,6 +24,7 @@ enum Token_kind {
 };
 
 // Token object represents each token, has an optional string attribute and an id which corresponds to the enum
+// Code from class
 struct Token {
     int kind;
     std::string attribute;
@@ -109,6 +111,18 @@ Token *Lexer::next() {
     }
     // Handle each token case
     switch (lookahead()) {
+        case '+': consume();
+                  buf = "";
+                  return new Token(Plus_tok, 0);
+        case '-': consume();
+                  buf = "";
+                  return new Token(Minus_tok, 0);
+        case '*': consume();
+                  buf = "";
+                  return new Token(Mul_tok, 0);
+        case '/': consume();
+                  buf = "";
+                  return new Token(Div_tok, 0);
         case '<': consume();
                   if (lookahead() == '=') {
                       consume();
@@ -135,35 +149,6 @@ Token *Lexer::next() {
                   }
                   buf = "";
                   return new Token(Gt_tok, 0);
-        case '+': consume();
-                  buf = "";
-                  return new Token(Plus_tok, 0);
-        case '-': consume();
-                  buf = "";
-                  return new Token(Minus_tok, 0);
-        case '*': consume();
-                  buf = "";
-                  return new Token(Mul_tok, 0);
-        case '/': consume();
-                  buf = "";
-                  return new Token(Div_tok, 0);
-        case '%': consume();
-                  buf = "";
-                  return new Token(Mod_tok, 0);
-        case '&': consume();
-                  if (lookahead() == '&') {
-                      consume();
-                      buf = "";
-                      return new Token(Amp_tok, 0);
-                  } else {
-                      std::cout << "ERRRORORORO!";
-                  }
-        case '|': consume();
-                  if(lookahead() == '|') {
-                      consume();
-                      buf = "";
-                      return new Token(Or_tok, 0);
-                  } 
         case '=': consume();
                   if (lookahead() == '='){
                       consume();
@@ -179,6 +164,23 @@ Token *Lexer::next() {
                       buf = "";
                       return new Token(Not_tok, 0);
                   }
+        case '&': consume();
+                  if (lookahead() == '&') {
+                      consume();
+                      buf = "";
+                      return new Token(Amp_tok, 0);
+                  } else {
+                      std::cout << "ERRRORORORO!";
+                  }
+        case '|': consume();
+                  if(lookahead() == '|') {
+                      consume();
+                      buf = "";
+                      return new Token(Or_tok, 0);
+                  } 
+        case '%': consume();
+                  buf = "";
+                  return new Token(Mod_tok, 0);
         case ')': consume();
                   buf = "";
                   return new Token(LeftParen_tok, 0);
@@ -188,6 +190,7 @@ Token *Lexer::next() {
         case '^': consume();
                   buf = "";
                   return new Token(Xor_tok, 0);
+        // Handle true boolean
         case 't':consume();
                  if (lookahead() == 'r') {
                      consume();
@@ -200,6 +203,7 @@ Token *Lexer::next() {
                          }
                      }
                  }
+        // Handle false boolean
         case 'f': consume();
                   if (lookahead() == 'a') {
                       consume();
@@ -215,25 +219,89 @@ Token *Lexer::next() {
                           }
                       }
                   }
+        // Handle int tokens. 
+        // These will 'fall through' to capture multidigit integers
         case '0':
-        case '1':
-        case '2':
-        case '3':
-                  std::cout << "next is a 3";
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9': consume();
-                  while(std::isdigit(lookahead())) {
+                  consume();
+                  while(std::isdigit(lookahead()))
                       consume();
-                  }
                   n = std::stoi(buf);
                   tok = new Token(Int_tok, buf);
                   buf = "";
                   return tok;
-        default: return new Token(Bool_tok, "Default");
+        case '1':
+                  consume();
+                  while(std::isdigit(lookahead()))
+                      consume();
+                  n = std::stoi(buf);
+                  tok = new Token(Int_tok, buf);
+                  buf = "";
+                  return tok;
+        case '2':
+                  consume();
+                  while(std::isdigit(lookahead())) 
+                      consume();
+                  n = std::stoi(buf);
+                  tok = new Token(Int_tok, buf);
+                  buf = "";
+                  return tok;
+        case '3':
+                  consume();
+                  while(std::isdigit(lookahead())) 
+                      consume();
+                  n = std::stoi(buf);
+                  tok = new Token(Int_tok, buf);
+                  buf = "";
+                  return tok;
+        case '4':
+                  consume();
+                  while(std::isdigit(lookahead())) 
+                      consume();
+                  n = std::stoi(buf);
+                  tok = new Token(Int_tok, buf);
+                  buf = "";
+                  return tok;
+        case '5':
+                  consume();
+                  while(std::isdigit(lookahead())) 
+                      consume();
+                  n = std::stoi(buf);
+                  tok = new Token(Int_tok, buf);
+                  buf = "";
+                  return tok;
+        case '6':
+                  consume();
+                  while(std::isdigit(lookahead()))
+                      consume();
+                  n = std::stoi(buf);
+                  tok = new Token(Int_tok, buf);
+                  buf = "";
+                  return tok;
+        case '7':
+                  consume();
+                  while(std::isdigit(lookahead()))
+                      consume();
+                  n = std::stoi(buf);
+                  tok = new Token(Int_tok, buf);
+                  buf = "";
+                  return tok;
+        case '8':
+                  consume();
+                  while(std::isdigit(lookahead()))
+                      consume();
+                  n = std::stoi(buf);
+                  tok = new Token(Int_tok, buf);
+                  buf = "";
+                  return tok;
+        case '9':
+                  consume();
+                  while(std::isdigit(lookahead()))
+                      consume();
+                  n = std::stoi(buf);
+                  tok = new Token(Int_tok, buf);
+                  buf = "";
+                  return tok;
+        default: return new Token(Bool_tok, "default");
     }
 };
 #endif
