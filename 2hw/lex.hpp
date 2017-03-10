@@ -47,10 +47,10 @@ struct Lexer {
 
     // Default constructor simple intializes everything to null (or zero)
     Lexer() {
-        n = 0;
-        buf = "";
         const char* first = nullptr;
         const char* last = nullptr;
+        buf = "";
+        n = 0;
     }
 
     // String contructor initializes first and last
@@ -74,13 +74,6 @@ struct Lexer {
         buf += *first++;
     }
 
-    // Detect if a comment was placed and handle appropriately (ignore it)
-    void comments() {
-        while (first != last) {
-            consume();
-        }
-    }
-
     // Actually tokenize the input
     Token *next();
 };
@@ -90,15 +83,17 @@ Token *Lexer::next() {
     // Hold our token
     Token *tok;
     // Use a temp variable to make code a bit cleaner
-    std::string temp;
+    std::string t;
     // Detect comments
     if (lookahead() == '#') {
-        comments();
-        temp = buf; 
+        while (first != last) {
+            consume();
+        }
+        t = buf; 
         // Clear buffer
         buf = "";
         // Return the token with comments
-        return new Token(commTok, temp);
+        return new Token(commTok, t);
     }
     // Handle each token case
     switch (lookahead()) {
